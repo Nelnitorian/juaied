@@ -1,4 +1,3 @@
-
 # Necesidades para el cliente de billing pueda funcionar
 _Aquí se describen las funciones escritas en RSC.py que necesitan una funcionalidad adicional_
 
@@ -29,4 +28,3 @@ updateStatus{
     #algo
     pass
 }
-```
