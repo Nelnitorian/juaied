@@ -17,7 +17,8 @@ fetchUsernames{
 _Función que se encarga de devolver los datos del usuario especificado_
 
 ```
-Este aún tengo que pensarlo porque el DAO está ahí, pero no me gustaría cambiar el path del script para importarlo. Tengo que darle una pensada aún.
+Este aún tengo que pensarlo porque el DAO está ahí, pero no me gustaría cambiar 
+el path del script para importarlo. Tengo que darle una pensada aún.
 ```
 
 ### updateStatus
