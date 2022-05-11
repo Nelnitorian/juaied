@@ -16,5 +16,5 @@
 --- UtilitiesFun.py
     Funciones para el manejo de páginas (Abrir, cerrar, pasar de una a otra...)
     
---- DaoUser.py
+--- DaoAdmin.py
     Dao de acceso a datos de administrador de la red.

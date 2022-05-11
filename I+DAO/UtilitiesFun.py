@@ -2,14 +2,14 @@ from tkinter import *
 from tkinter import messagebox
 
 
-from DaoUser import DaoUser
+from DaoAdmin import DaoAdmin
 from PageUser import PageUser
 
 
 #Función que checkea username y pass.
 def checkAuth(window, username, password):
     
-    access = DaoUser()
+    access = DaoAdmin()
 
     realpassword = access.select_pass(username)
 

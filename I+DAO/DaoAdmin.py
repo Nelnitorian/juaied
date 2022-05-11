@@ -1,6 +1,6 @@
 import pymysql
 
-class DaoUser:
+class DaoAdmin:
     def __init__(self):
         self.connection = pymysql.connect(
             host='localhost',
