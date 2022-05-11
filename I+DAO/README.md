@@ -1,14 +1,20 @@
 
 --- Main.py
     Inicio de programa
+    
+--- PageGeneric.py
+    Página padre de las que heredan las demás páginas.
 
---- AuthenticationPage.py
+--- PageLogin.py
     Ventana de Login
 
---- UserPage.py
+--- PageUser.py
     Ventana principal de usuario
     
-    TODO: Pte. funcionalidad.
+    TODO: Pte. funcionalidad botones
 
---- loginfunct.py
-    Funciones para Login --> AuthenticationPage.py
+--- UtilitiesFun.py
+    Funciones para el manejo de páginas (Abrir, cerrar, pasar de una a otra...)
+    
+--- DaoUser.py
+    Dao de acceso a datos de administrador de la red.
