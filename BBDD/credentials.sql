@@ -1,8 +1,8 @@
--- DATABASE useless
+-- DATABASE credentials
 
-DROP DATABASE useless;
-CREATE DATABASE useless;
-USE useless;
+DROP DATABASE credentials;
+CREATE DATABASE credentials;
+USE credentials;
 
 #                           
 # Table structure for table 'users'

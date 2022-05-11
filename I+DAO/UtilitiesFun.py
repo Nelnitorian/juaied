@@ -1,18 +1,15 @@
-import sys
-
-sys.path.append('/home/edurubcam/workspace/juaied/DAO/')
-
-from userDao import userDao
-
 from tkinter import *
 from tkinter import messagebox
-from UserPage import UserPage
+
+
+from DaoUser import DaoUser
+from PageUser import PageUser
 
 
 #Función que checkea username y pass.
 def checkAuth(window, username, password):
     
-    access = userDao()
+    access = DaoUser()
 
     realpassword = access.select_pass(username)
 
@@ -24,9 +21,9 @@ def checkAuth(window, username, password):
 #Función que lanza la ventana MainPage y cierra AuthenticationPage
 def validAuth(window):
     #Cierra la ventana principal
-    window.withdraw()
+    window.destroy()
 
     #Abre MainPage
     window = Tk()
-    application = UserPage(window)
+    PageUser(window)
     window.mainloop()

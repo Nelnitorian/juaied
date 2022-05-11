@@ -1,12 +1,12 @@
 import pymysql
 
-class userDao:
+class DaoUser:
     def __init__(self):
         self.connection = pymysql.connect(
             host='localhost',
             user='admin',
             password='admin',
-            db='useless'
+            db='credentials'
         )
         self.cursor = self.connection.cursor()
 
@@ -22,7 +22,7 @@ class userDao:
             return password[0]
 
         except Exception as e:
-            raise
+            return False
     
 
     #Método que modifica la contraseña del usuario
@@ -59,7 +59,7 @@ class userDao:
             return email[0]
 
         except Exception as e:
-            raise
+            return False
 
     # Método que modifica el email de usuario
 
