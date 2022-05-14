@@ -3,27 +3,43 @@ from tkinter import messagebox
 
 
 from DaoAdmin import DaoAdmin
-from PageUser import PageUser
+from DaoRad import DaoRad
 
 
 #Función que checkea username y pass.
-def checkAuth(window, username, password):
+def checkAuth(self):
     
     access = DaoAdmin()
 
-    realpassword = access.select_pass(username)
+    realpassword = access.select_pass(self.username.get())
 
-    if (password == realpassword):
-        validAuth(window)
+    if (self.password.get() == realpassword):
+        return True
     else:
-        messagebox.showwarning("Warning", "Usuario y/o contraseña incorrectos")
+        return False
 
-#Función que lanza la ventana MainPage y cierra AuthenticationPage
-def validAuth(window):
-    #Cierra la ventana principal
-    window.destroy()
 
-    #Abre MainPage
-    window = Tk()
-    PageUser(window)
-    window.mainloop()
+def checkNewUser(self):
+    
+    correct = True
+
+    if(self.apellidos.get() == ''):
+        correct = False
+    elif(self.nombre.get() == ''):
+        correct = False
+    elif(self.tarifa.get() == ''):
+        correct = False
+    elif(self.username.get() == ''):
+        correct = False
+    elif(self.password.get() == ''):
+        correct = False
+    
+    return correct
+
+def persistNewUser(self):
+    
+    access = DaoRad()
+    
+    access.add_user(self.username.get(),self.password.get())
+
+    return True

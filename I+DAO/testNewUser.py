@@ -1,9 +1,9 @@
 from tkinter import *
 
-from PageLogin import PageLogin
+from PageNewUser import PageNewUser
 
 if __name__ == '__main__':
-    
+
     window = Tk()
-    PageLogin(window)
+    PageNewUser(window)
     window.mainloop()

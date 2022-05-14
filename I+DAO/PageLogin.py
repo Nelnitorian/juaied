@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 from PageGeneric import PageGeneric
+from PageUser import PageUser
 from UtilitiesFun import *
 
 class PageLogin(PageGeneric):
@@ -35,8 +37,21 @@ class PageLogin(PageGeneric):
         self.password.grid(row=2,column=1, padx = 5)
 
         #Button Submit
-        button = ttk.Button(frame, text = 'Submit', command=lambda: checkAuth(self.win,self.username.get(), self.password.get()))
+        button = ttk.Button(frame, text = 'Submit', command=lambda: self.asButton(event='<Return'))
         button.grid(row=4,columnspan=2,sticky=W+E, pady = 5, padx = 5)
 
     def asButton(self,event):
-        checkAuth(self.win,self.username.get(), self.password.get())
+
+        correct = checkAuth(self)
+
+        self.username.delete("0","end")
+        self.password.delete("0","end")
+
+        if(correct):
+            #self.win.destroy()
+            self.win.withdraw()
+            window = Tk()
+            PageUser(window,self.win)
+            window.mainloop()
+        else:
+            messagebox.showwarning("Warning", "Usuario y/o contraseña incorrectos")
