@@ -16,7 +16,7 @@ _SEPARATOR = '##'
 _END = '&&'
 
 def separate(message):
-    msgs = message.split(_END)
+    msgs = message.split(_END)[:-1]
     return msgs
 
 def extract(message):

@@ -9,7 +9,7 @@
 
 
 """
-import protocol, loggerConf
+from src import loggerConf,protocol
 import socket
 from time import sleep
 from threading import Thread
@@ -23,26 +23,33 @@ global STOP_THREADS
 STOP_THREADS = False
 
 def run():
+    
+    
+    logger,handler = loggerConf.configureLogger()
+    logger.debug('Logger initiated')
+    
+    logger.debug('Initiating socket')
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((TCP_IP, TCP_PORT))
     
-    logger,handler = loggerConf.configureLogger()
     
     if login(s):
         
+        logger.debug('Login successful')
         #Receiving thread
         logger.debug('Starting receiving thread...')
         receiveThread = Thread(target = receiveFunc,args=(s,logger,))
         try:
             receiveThread.start()
             
-            
-            while True:
+            #TODO: este if antes era un while
+            if True:
                 usernames = fetchUsernames()
                 for user in usernames:
                     data = fetchUserData(user)
                     msg = createProtocolMessage(user, data)
-                    s.send(msg)
+                    logger.debug('Sending data {data} to server...'.format(data=msg))
+                    #s.send(msg.encode())
                 
                 sleep(INTERVAL)
 
@@ -52,8 +59,13 @@ def run():
             logger.debug('Stopping threads')
             global STOP_THREADS
             STOP_THREADS = True
-            receiveThread.join()
-            s.close()
+            
+            #TODO comprender comportamiento de Thread, join y try/except
+            #receiveThread.join()
+            try:
+                s.close()
+            except:
+                print("Error, no hago nada")
             logger.debug('Connection closed')
     logger.debug('Closing logger handler...')
     logger.removeHandler(handler)
@@ -84,15 +96,15 @@ def login(s):
 
 def receiveFunc(s,logger):
     global STOP_THREADS
-    while not STOP_THREADS:
-        msg = s.recv(BUFFER_SIZE)
+    #TODO este if antes era un while
+    if not STOP_THREADS:
+        msg = s.recv(BUFFER_SIZE).decode()
         #we may have received more than one msg, we have to separate them
         msgs = protocol.separate(msg)
         for data in msgs:
-            while data:
-                username, status = data
-                logger.debug('Updating {u}\'s status to {s}'.format(u=username,s=status))
-                updateStatus(username,status)
+            username, status = protocol.extract(data)
+            logger.debug('Updating {u}\'s status to {s}'.format(u=username,s=status))
+            updateStatus(username,status)
     pass
     
 def updateStatus(username,status):
