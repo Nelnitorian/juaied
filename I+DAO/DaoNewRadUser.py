@@ -1,6 +1,6 @@
 import pymysql
 
-class DaoRad:
+class DaoNewRadUser:
     def __init__(self):
         self.connection = pymysql.connect(
             host='localhost',
@@ -30,4 +30,14 @@ class DaoRad:
             self.connection.commit()
 
         except Exception as e:
+            raise
+
+    def update_user(self,username,password,oldusername):
+        sql = "UPDATE radcheck SET username='{}', value='{}' WHERE username='{}'".format(username,password,oldusername)
+
+        try:
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        except:
             raise

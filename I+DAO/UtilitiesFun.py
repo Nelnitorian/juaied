@@ -3,7 +3,7 @@ from tkinter import messagebox
 
 
 from DaoAdmin import DaoAdmin
-from DaoRad import DaoRad
+from DaoNewRadUser import DaoNewRadUser
 
 
 #Función que checkea username y pass.
@@ -36,9 +36,22 @@ def checkNewUser(self):
     
     return correct
 
+def checkModUser(self):
+    
+    correct = True
+
+    if(self.tarifa.get() == ''):
+        correct = False
+    elif(self.username.get() == ''):
+        correct = False
+    elif(self.password.get() == ''):
+        correct = False
+    
+    return correct
+
 def persistNewUser(self):
     
-    access = DaoRad()
+    access = DaoNewRadUser()
     
     access.add_user(self.username.get(),self.password.get())
 

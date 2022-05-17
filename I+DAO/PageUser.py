@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PageGeneric import PageGeneric
 from PageNewUser import PageNewUser
+from PageModUser import PageModUser
 
 class PageUser(PageGeneric):
 
@@ -47,7 +48,7 @@ class PageUser(PageGeneric):
         button3.grid(row=5,columnspan=2,sticky=W+E, pady = 7, padx = 5)
 
         #Modificar Usuario Button
-        button3 = ttk.Button(frame2, text = 'MODIFICAR USUARIO', command=lambda: self.updateCharge())
+        button3 = ttk.Button(frame2, text = 'MODIFICAR USUARIO', command=lambda: self.updateUser())
         button3.grid(row=6,columnspan=2,sticky=W+E, pady = 7, padx = 5)
 
         #LogOut Button
@@ -67,7 +68,10 @@ class PageUser(PageGeneric):
         window.mainloop()
 
     def updateUser(self):
-        pass
+        self.win.withdraw()
+        window = Tk()
+        PageModUser(window,self.win)
+        window.mainloop()
 
     def logOut(self):
         self.on_closing()
