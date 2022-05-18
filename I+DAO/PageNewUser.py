@@ -4,6 +4,8 @@ from tkinter import messagebox
 
 from PageGeneric import PageGeneric
 from UtilitiesFun import *
+from DaoRad import DaoRad
+from DaoUserInf import DaoUserInf
 
 class PageNewUser(PageGeneric):
 
@@ -70,7 +72,7 @@ class PageNewUser(PageGeneric):
 
     def asButton(self,event):
         if(checkNewUser(self)):
-            if(persistNewUser(self)):
+            if(self.persist_user()):
                 messagebox.showinfo("Info","Nuevo usuario agregado correctamente")
 
                 #Borramos datos del formulario
@@ -91,3 +93,13 @@ class PageNewUser(PageGeneric):
         self.tarifa.delete("0","end")
         self.username.delete("0","end")
         self.password.delete("0","end")
+
+    def persist_user(self):
+        daorad = DaoRad()
+        daouser = DaoUserInf()
+
+        daorad.add_user(self.username.get(),self.password.get())
+
+        daouser.new_user(self.username.get(),self.password.get(),self.apellidos.get(),self.nombre.get(),self.tarifa.get())
+
+        return True

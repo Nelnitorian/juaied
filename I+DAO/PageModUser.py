@@ -4,8 +4,8 @@ from tkinter import messagebox
 
 from PageGeneric import PageGeneric
 from UtilitiesFun import *
-from DaoModUser import DaoModUser
-from DaoNewRadUser import DaoNewRadUser
+from DaoUserInf import DaoUserInf
+from DaoRad import DaoRad
 
 class PageModUser(PageGeneric):
 
@@ -30,7 +30,7 @@ class PageModUser(PageGeneric):
 
         #Frame container
         frame1 = LabelFrame(self.win)
-        frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 3, padx = 180,pady=20 )
+        frame1.grid(row = 0, column = 0, rowspan = 3, columnspan = 3, padx = 180,pady=40 )
  
         #Bienvenida Label
         label = Label(frame1, text = 'MODIFICAR USUARIO')
@@ -48,7 +48,7 @@ class PageModUser(PageGeneric):
 
         #Frame continer
         frame3 = LabelFrame(self.win, text = 'Puede modificar los siguientes datos')
-        frame3.grid(row = 4, column = 0, rowspan = 3, columnspan = 3, padx = 45, pady = 120)
+        frame3.grid(row = 4, column = 0, rowspan = 3, columnspan = 3, padx = 45, pady = 100)
 
         #Label Tarifa
         Label(frame3, text = 'Tarifa: ').grid(row = 5, column = 0, pady = 7, padx = 5)
@@ -87,7 +87,7 @@ class PageModUser(PageGeneric):
          self.win.destroy()
 
     def buscaUsuarios(self):
-        dao = DaoModUser()
+        dao = DaoUserInf()
         users = dao.select_users()
         userArray = []
         for user in users:
@@ -95,20 +95,31 @@ class PageModUser(PageGeneric):
         return userArray
 
     def selection_changed(self,event):
+        
         self.apellidos = self.combo.get()
-        dao = DaoModUser()
-        info = dao.select_user_information(self.apellidos)
-        self.tarifa.insert(0,info[0])
-        self.username.insert(0,info[1])
-        self.oldusername = info[1]
-        self.password.insert(0,info[2])
+        dao = DaoUserInf()
+        username = dao.select_username_by_apellidos(self.apellidos)
+        self.oldusername = username
+        #info = dao.select_user_information(self.apellidos)
+
+        #Actualizamos datos
+        self.tarifa.delete(0,"end")
+        self.username.delete(0,"end")
+        self.password.delete(0,"end")
+        self.tarifa.insert(0,dao.select_tarifa(username))
+        self.username.insert(0,username)
+        self.password.insert(0,dao.select_pass(username))
 
     def updateInfo(self):
-        radDao = DaoNewRadUser()
+        radDao = DaoRad()
         radDao.update_user(self.username.get(),self.password.get(),self.oldusername)
 
-        userDao = DaoModUser()
-        userDao.update_user_data(self.username.get(),self.password.get(),self.tarifa.get(),self.apellidos)
+        userDao = DaoUserInf()
+        #userDao.update_user_data(self.username.get(),self.password.get(),self.tarifa.get(),self.apellidos)
+
+        userDao.update_username(self.oldusername, self.username.get())
+        userDao.update_pass(self.username.get(),self.password.get())
+        userDao.update_tarifa(self.username.get(),self.tarifa.get())
 
         return True
         

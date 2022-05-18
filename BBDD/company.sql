@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS user_inf (
 );
 
 INSERT INTO user_inf VALUES ('edurubcam','password','Eduardo','Rubio Camacho','TarifaOne',13,100,100);
+INSERT INTO user_inf VALUES ('manolito','passmanolo','Manolo','Marin Marmolea','TarifaOne',20,200,240);
 
 CREATE TABLE IF NOT EXISTS tarifa_inf (
     tarifa varchar(64) NOT NULL default '',

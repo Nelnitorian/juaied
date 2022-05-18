@@ -1,10 +1,4 @@
-from tkinter import *
-from tkinter import messagebox
-
-
 from DaoAdmin import DaoAdmin
-from DaoNewRadUser import DaoNewRadUser
-
 
 #Función que checkea username y pass.
 def checkAuth(self):
@@ -48,11 +42,3 @@ def checkModUser(self):
         correct = False
     
     return correct
-
-def persistNewUser(self):
-    
-    access = DaoNewRadUser()
-    
-    access.add_user(self.username.get(),self.password.get())
-
-    return True
