@@ -40,6 +40,11 @@ def configureLogger():
     logger.addHandler(handler)
     
     return logger,handler  
+
+def removeLogger(logger, handler):
+    
+    logger.removeHandler(handler)
+    handler.close()
     
 if __name__ == "__main__":
     logger,handler = configureLogger()

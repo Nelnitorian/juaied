@@ -1,33 +1,18 @@
+#Manual de uso
 
-# Necesidades para el cliente de billing pueda funcionar
-_Aquí se describen las funciones escritas en RSC.py que necesitan una funcionalidad adicional_
+##src.loggerConf
 
-### fetchUsernames
-_Función que se encarga de devolver una lista con los usuarios cuya información se haya modificado en el último intervalo_
+###configureLogger()
+_Se creará la carpeta 'log' en el lugar de ejecución y se devolverá tanto un logger como un handler._
 
-```
-RSC.py#fetchUsernames()
-fetchUsernames{
-    #algo
-    return usernames
-}
-```
-
-### fetchUserData
-_Función que se encarga de devolver los datos del usuario especificado_
+_Para la creación:_
 
 ```
-Este aún tengo que pensarlo porque el DAO está ahí, pero no me gustaría cambiar 
-el path del script para importarlo. Tengo que darle una pensada aún.
+    logger,handler = loggerConf.configureLogger()
 ```
 
-### updateStatus
-_Función que actualiza el estado de un usuario para desconectarlo de la sesión y evitar que en futuros intentos de sesión se le conceda acceso_
+_Para la finalización:_
 
 ```
-RSC.py#updateStatus(username,status)
-updateStatus{
-    #algo
-    pass
-}
+    loggerConf.removeLogger(logger,handler)
 ```
