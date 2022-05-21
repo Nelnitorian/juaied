@@ -1,8 +1,8 @@
-#Manual de uso
+# Manual de uso
 
-##src.loggerConf
+## src.loggerConf
 
-###configureLogger()
+### configureLogger()
 _Se creará la carpeta 'log' en el lugar de ejecución y se devolverá tanto un logger como un handler._
 
 _Para la creación:_
