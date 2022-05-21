@@ -55,6 +55,7 @@ def updateDatabase(user,data):
     time = data[0]
     pkg = data[1]
     dinero = getUpdatedDinero(user,time,pkg)
+    logger.debug('Actualización de datos en tabla: user = {user}, time = {time}, pkg = {pkg}'.format(user=user,time=time,pkg=pkg))
     dui.update_dinero(user,dinero)
     dui.update_paquetes(user,pkg)
     dui.update_tiempo(user,time)
