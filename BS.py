@@ -3,6 +3,7 @@
 from src import loggerConf
 from time import sleep
 import DaoRad, DaoUserInf, DaoTax
+import signal
 
 """
 
@@ -24,6 +25,9 @@ def run():
     dr = DaoRad()
     dui = DaoUserInf()
     dt = DaoTax()
+    
+    logger.debug('Configuring Ctrl+C handler')
+    signal.signal(signal.SIGINT, forceClose)
     
     while True:
         usernames = getUsernames()
@@ -73,6 +77,10 @@ def getUpdatedDinero(user,time,pkg):
         accounted = time
     dinero = ratio * accounted
     return dinero
+
+def forceClose():
+    global logger,handler
+    loggerConf.removeLogger(logger,handler)
 
 if __name__ == '__main__':
     run()
