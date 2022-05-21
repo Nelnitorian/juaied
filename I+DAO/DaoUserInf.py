@@ -40,6 +40,21 @@ class DaoUserInf:
 
         except Exception as e:
             return False
+
+    """
+    PageUserInf métodos
+    """
+
+    def select_rows(self):
+        sql = "SELECT count(*) FROM user_inf"
+        
+        try:
+            self.cursor.execute(sql)
+            rows = self.cursor.fetchone()
+
+            return rows[0]
+        except Exception as e:
+            raise
   
     """
     MÉTODOS DAO

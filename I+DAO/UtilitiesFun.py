@@ -1,4 +1,4 @@
-from DaoAdmin import DaoAdmin
+from DaoAdmin import DaoAdmin 
 
 #Función que checkea username y pass.
 def checkAuth(self):
@@ -41,4 +41,17 @@ def checkModUser(self):
     elif(self.password.get() == ''):
         correct = False
     
+    return correct
+
+def checkNewTax(self):
+
+    correct = True
+
+    if(self.tarifa.get() == ''):
+        correct = False
+    elif(self.control.get() == ''):
+        correct = False
+    elif(self.ratio.get() == ''):
+        correct = False
+
     return correct

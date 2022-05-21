@@ -1,8 +1,11 @@
 from tkinter import *
 from tkinter import ttk
+
 from PageGeneric import PageGeneric
 from PageNewUser import PageNewUser
 from PageModUser import PageModUser
+from PageNewTax import PageNewTax
+from PageUserInf import PageUserInf
 
 class PageUser(PageGeneric):
 
@@ -36,11 +39,11 @@ class PageUser(PageGeneric):
         frame2.grid(row = 2, column = 0, rowspan = 3, columnspan = 3, pady = 100, padx = 100 )
         
         #Informacion de usuario Button
-        button1 = ttk.Button(frame2, text = 'INFORMACIÓN DE USUARIOS', command=lambda: self.userList())
+        button1 = ttk.Button(frame2, text = 'INFORMACIÓN Y FACTURACIÓN DE USUARIOS', command=lambda: self.userList())
         button1.grid(row=3,columnspan=2,sticky=W+E, pady = 7, padx = 5)
 
         #Crear Tarifa Button
-        button2 = ttk.Button(frame2, text = 'NUEVA TARIFA', command=lambda: self.newCharge())
+        button2 = ttk.Button(frame2, text = 'NUEVA TARIFA', command=lambda: self.newTax())
         button2.grid(row=4,columnspan=2,sticky=W+E, pady = 7, padx = 5)
 
         #Nuevo Usuario Button
@@ -56,10 +59,16 @@ class PageUser(PageGeneric):
         buttonLO.place(x=500,y=400, anchor='se')
 
     def userList(self):
-        pass
+        self.win.withdraw()
+        window = Tk()
+        PageUserInf(window,self.win)
+        window.mainloop()
 
-    def newCharge(self):
-        pass
+    def newTax(self):
+        self.win.withdraw()
+        window = Tk()
+        PageNewTax(window,self.win)
+        window.mainloop()
 
     def newUser(self):
         self.win.withdraw()

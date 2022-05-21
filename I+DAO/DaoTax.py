@@ -71,3 +71,16 @@ class DaoTax:
             self.connection.commit()
         except Exception as e:
             raise 
+
+    # Método que devuelve todas las tarifas
+
+    def select_tarifas(self):
+        sql = "SELECT tarifa FROM tarifa_inf"
+
+        try:
+            self.cursor.execute(sql)
+            tarifas = self.cursor.fetchall()
+
+            return tarifas
+        except Exception as e:
+            raise

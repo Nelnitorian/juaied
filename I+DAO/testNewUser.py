@@ -1,10 +1,10 @@
 from tkinter import *
 
-from PageModUser import PageModUser
+from PageUserInf import PageUserInf
 
 if __name__ == '__main__':
 
     window = Tk()
     parent = Tk()
-    PageModUser(parent,window)
+    PageUserInf(parent,window)
     window.mainloop()
