@@ -171,7 +171,7 @@ class PdfMaker():
     def dumpPdf(self):
         folder = 'facturas'
         loggerConf.createFolder(folder)
-        pdf_name = '{u}.pdf'.format(u=self.username)
+        pdf_name = '{s}_{n}.pdf'.format(s=self.surname.replace(' ',''),n=self.name.replace(' ',''))
         path = os.path.join(folder,pdf_name)
         with open(path, "wb") as pdf_file_handle:
             PDF.dumps(pdf_file_handle, self.pdf)
