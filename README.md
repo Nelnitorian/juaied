@@ -17,7 +17,7 @@ _Para la finalización:_
     loggerConf.removeLogger(logger,handler)
 ```
 
-## pdfMaker
+## PdfMaker
 
 ### PdfMaker(logger, username, nombre, apellidos, tarifa, qty, uprice, money, monitor)
 _Se le han de pasar todos los argumentos, entre ellos el logger que generará los logs._
