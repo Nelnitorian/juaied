@@ -2,7 +2,7 @@
 
 
 #Main imports
-from borb.pdf.document import Document
+from borb.pdf import Document
 from borb.pdf.page.page import Page
 # New import
 from borb.pdf.canvas.layout.page_layout.multi_column_layout import SingleColumnLayout
@@ -25,142 +25,174 @@ from borb.pdf.canvas.color.color import HexColor, X11Color
 from borb.pdf.canvas.layout.table.fixed_column_width_table import FixedColumnWidthTable as Table
 from borb.pdf.canvas.layout.table.table import TableCell
 
-# New import
-from borb.pdf.page.page import DestinationType
 
 # New import
 from borb.pdf.pdf import PDF
-    
-    
+
+from src import loggerConf
+
+import os
 
 
-def _build_invoice_information():    
-    table_001 = Table(number_of_rows=5, number_of_columns=3)
-	
-    table_001.add(Paragraph("[Street Address]"))    
-    table_001.add(Paragraph("Date", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT))    
-    now = datetime.now()    
-    table_001.add(Paragraph("%d/%d/%d" % (now.day, now.month, now.year)))
-	
-    table_001.add(Paragraph("[City, State, ZIP Code]"))    
-    table_001.add(Paragraph("Invoice #", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT))
-    table_001.add(Paragraph("%d" % random.randint(1000, 10000)))   
-	
-    table_001.add(Paragraph("[Phone]"))    
-    table_001.add(Paragraph("Due Date", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT))
-    table_001.add(Paragraph("%d/%d/%d" % (now.day, now.month, now.year))) 
-	
-    table_001.add(Paragraph("[Email Address]"))    
-    table_001.add(Paragraph(" "))
-    table_001.add(Paragraph(" "))
+class PdfMaker():
 
-    table_001.add(Paragraph("[Company Website]"))
-    table_001.add(Paragraph(" "))
-    table_001.add(Paragraph(" "))
+    def __init__(self, logger, username, nombre, apellidos, tarifa, qty, uprice, money, monitor):
 
-    table_001.set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))    		
-    table_001.no_borders()
-    return table_001
+        logger.debug("Initiating PdfMaker...")
 
-def _build_billing_and_shipping_information():  
-    table_001 = Table(number_of_rows=6, number_of_columns=2)  
-    table_001.add(  
-        Paragraph(  
-            "BILL TO",  
-            background_color=HexColor("263238"),  
-            font_color=X11Color("White"),  
-        )  
-    )  
-    table_001.add(  
-        Paragraph(  
-            "SHIP TO",  
-            background_color=HexColor("263238"),  
-            font_color=X11Color("White"),  
-        )  
-    )  
-    table_001.add(Paragraph("[Recipient Name]"))        # BILLING  
-    table_001.add(Paragraph("[Recipient Name]"))        # SHIPPING  
-    table_001.add(Paragraph("[Company Name]"))          # BILLING  
-    table_001.add(Paragraph("[Company Name]"))          # SHIPPING  
-    table_001.add(Paragraph("[Street Address]"))        # BILLING  
-    table_001.add(Paragraph("[Street Address]"))        # SHIPPING  
-    table_001.add(Paragraph("[City, State, ZIP Code]")) # BILLING  
-    table_001.add(Paragraph("[City, State, ZIP Code]")) # SHIPPING  
-    table_001.add(Paragraph("[Phone]"))                 # BILLING  
-    table_001.add(Paragraph("[Phone]"))                 # SHIPPING  
-    table_001.set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))  
-    table_001.no_borders()  
-    return table_001
+        self.logger = logger
+
+        self.username = username
+        self.name = nombre
+        self.surname = apellidos
+        self.tarifa = tarifa
+
+        self.qty = qty
+        self.uprice = uprice
+        self.money = money
+        self.monitor = monitor
+
+        #Create document
+        self.pdf = Document()
+
+        # Add page
+        self.page = Page()
+        self.pdf.append_page(self.page)
+
+        self.page_layout = SingleColumnLayout(self.page)
+        self.page_layout.vertical_margin = self.page.get_page_info().get_height() * Decimal(0.02)
 
 
-def _build_itemized_description_table():  
-    table_001 = Table(number_of_rows=15, number_of_columns=4)  
-    for h in ["DESCRIPTION", "QTY", "UNIT PRICE", "AMOUNT"]:  
-        table_001.add(  
-            TableCell(  
-                Paragraph(h, font_color=X11Color("White")),  
-                background_color=HexColor("016934"),  
-            )  
-        )  
-  
-    odd_color = HexColor("BBBBBB")  
-    even_color = HexColor("FFFFFF")  
-    for row_number, item in enumerate([("Product 1", 2, 50), ("Product 2", 4, 60), ("Labor", 14, 60)]):  
-        c = even_color if row_number % 2 == 0 else odd_color  
-        table_001.add(TableCell(Paragraph(item[0]), background_color=c))  
-        table_001.add(TableCell(Paragraph(str(item[1])), background_color=c))  
-        table_001.add(TableCell(Paragraph("$ " + str(item[2])), background_color=c))  
-        table_001.add(TableCell(Paragraph("$ " + str(item[1] * item[2])), background_color=c))  
-	  
-	# Optionally add some empty rows to have a fixed number of rows for styling purposes
-    for row_number in range(3, 10):  
-        c = even_color if row_number % 2 == 0 else odd_color  
-        for _ in range(0, 4):  
-            table_001.add(TableCell(Paragraph(" "), background_color=c))  
-  
-    table_001.add(TableCell(Paragraph("Subtotal", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT,), col_span=3,))  
-    table_001.add(TableCell(Paragraph("$ 1,180.00", horizontal_alignment=Alignment.RIGHT)))  
-    table_001.add(TableCell(Paragraph("Discounts", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT,),col_span=3,))  
-    table_001.add(TableCell(Paragraph("$ 177.00", horizontal_alignment=Alignment.RIGHT)))  
-    table_001.add(TableCell(Paragraph("Taxes", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT), col_span=3,))  
-    table_001.add(TableCell(Paragraph("$ 100.30", horizontal_alignment=Alignment.RIGHT)))  
-    table_001.add(TableCell(Paragraph("Total", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT  ), col_span=3,))  
-    table_001.add(TableCell(Paragraph("$ 1163.30", horizontal_alignment=Alignment.RIGHT)))  
-    table_001.set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))  
-    table_001.no_borders()  
-    return table_001
+        self.page_layout.add(
+                Image(
+                "https://drive.google.com/uc?id=1H-9_qsGueIgMVjmrR8GX2rxkBl-eMePC",
+                width=Decimal(128*1.8),
+                height=Decimal(128),
+                ))
 
 
+        # Invoice information table
+        self.page_layout.add(self._build_invoice_information())
 
-# Create document
-pdf = Document()
+        # Empty paragraph for spacing
+        self.page_layout.add(Paragraph(" "))
 
-# Add page
-page = Page()
-pdf.append_page(page)
+        # Billing and shipping information table
+        self.page_layout.add(self._build_billing_and_shipping_information())
 
-page_layout = SingleColumnLayout(page)
-page_layout.vertical_margin = page.get_page_info().get_height() * Decimal(0.02)
+        # Empty paragraph for spacing
+        self.page_layout.add(Paragraph(" "))
 
-page_layout.add(
-        Image(
-        "https://s3.stackabuse.com/media/articles/creating-an-invoice-in-python-with-ptext-1.png",
-        width=Decimal(128),
-        height=Decimal(128),
-        ))
+        # Itemized description
+        self.page_layout.add(self._build_itemized_description_table())
+
+        logger.debug("Finished initiating PdfMaker.")
+
+    def _build_invoice_information(self):
+
+        table_001 = Table(number_of_rows=4, number_of_columns=2)
 
 
-# Invoice information table
-page_layout.add(_build_invoice_information())
+        table_001.add(Paragraph("Date", font="Helvetica-Bold"))
+        now = datetime.now()
+        table_001.add(Paragraph("%d/%d/%d" % (now.day, now.month, now.year)))
 
-# Empty paragraph for spacing
-page_layout.add(Paragraph(" "))
+        table_001.add(Paragraph("Invoice #", font="Helvetica-Bold"))
+        table_001.add(Paragraph("%d" % random.randint(1000, 10000)))
 
-# Billing and shipping information table
-page_layout.add(_build_billing_and_shipping_information())
+        table_001.add(Paragraph("Due Date", font="Helvetica-Bold"))
+        table_001.add(Paragraph("%d/%d/%d" % (now.day, now.month, now.year)))
 
-# Itemized description
-page_layout.add(_build_itemized_description_table())
+        table_001.add(Paragraph("Company", font="Helvetica-Bold"))
+        table_001.add(Paragraph("Juaied"))
 
-with open("output2.pdf", "wb") as pdf_file_handle:
-    PDF.dumps(pdf_file_handle, pdf)
+        table_001.set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))
+        table_001.no_borders()
+
+        return table_001
+
+
+    def _build_billing_and_shipping_information(self):
+        table_001 = Table(number_of_rows=4, number_of_columns=1)
+        table_001.add(
+            Paragraph(
+                "BILL TO",
+                background_color=HexColor("263238"),
+                font_color=X11Color("White"),
+            )
+        )
+        table_001.add(Paragraph('{surname}, {name}'.format(surname=self.surname,name=self.name)))        # BILLING
+        table_001.add(Paragraph("{u}".format(u=self.username)))  # BILLING
+        table_001.add(Paragraph("{t}".format(t=self.tarifa)))    # BILLING
+        table_001.set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))
+        table_001.no_borders()
+        return table_001
+
+
+    def _build_itemized_description_table(self):
+        table_001 = Table(number_of_rows=9, number_of_columns=4)
+        for h in ["DESCRIPTION", "QTY", "UNIT PRICE", "AMOUNT"]:
+            table_001.add(
+                TableCell(
+                    Paragraph(h, font_color=X11Color("White")),
+                    background_color=HexColor("016934"),
+                )
+            )
+
+        odd_color = HexColor("BBBBBB")
+        even_color = HexColor("FFFFFF")
+        total_money = 0
+        for row_number, item in enumerate([(self.monitor, self.qty, self.uprice, self.money)]):
+            c = even_color if row_number % 2 == 0 else odd_color
+            table_001.add(TableCell(Paragraph(item[0]), background_color=c))
+            table_001.add(TableCell(Paragraph(str(item[1])), background_color=c))
+            table_001.add(TableCell(Paragraph("$ " + str(item[2])), background_color=c))
+            table_001.add(TableCell(Paragraph("$ " + str(item[3])), background_color=c))
+            total_money += item[3]
+
+    	# Optionally add some empty rows to have a fixed number of rows for styling purposes
+        for row_number in range(1, 4):
+            c = even_color if row_number % 2 == 0 else odd_color
+            for _ in range(0, 4):
+                table_001.add(TableCell(Paragraph(" "), background_color=c))
+
+        table_001.add(TableCell(Paragraph("Subtotal", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT,), col_span=3,))
+        table_001.add(TableCell(Paragraph("$ {tm:.2f}".format(tm=total_money/1.1), horizontal_alignment=Alignment.RIGHT)))
+        table_001.add(TableCell(Paragraph("Discounts", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT,),col_span=3,))
+        table_001.add(TableCell(Paragraph("$ {d:.2f}".format(d=0.0), horizontal_alignment=Alignment.RIGHT)))
+        table_001.add(TableCell(Paragraph("Taxes", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT), col_span=3,))
+        table_001.add(TableCell(Paragraph("$ {t:.2f}".format(t=total_money*0.1/1.1), horizontal_alignment=Alignment.RIGHT)))
+        table_001.add(TableCell(Paragraph("Total", font="Helvetica-Bold", horizontal_alignment=Alignment.RIGHT  ), col_span=3,))
+        table_001.add(TableCell(Paragraph("$ {tm:.2f}".format(tm=total_money), horizontal_alignment=Alignment.RIGHT)))
+        table_001.set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))
+        table_001.no_borders()
+        return table_001
+
+    def dumpPdf(self):
+        folder = 'facturas'
+        loggerConf.createFolder(folder)
+        pdf_name = '{u}.pdf'.format(u=self.username)
+        path = os.path.join(folder,pdf_name)
+        with open(path, "wb") as pdf_file_handle:
+            PDF.dumps(pdf_file_handle, self.pdf)
+            logger.debug("PDF dumped properly")
+
+
+if __name__ == '__main__':
+
+    logger,handler = loggerConf.configureLogger()
+
+    username = "usuario123"
+    nombre = "pepe antonio"
+    apellidos = "el del barrio"
+    tarifa = "360 NOSCOPE"
+
+    qty = 5
+    uprice = 10
+    money = 50
+    monitor = "paquetes"
+
+    pdfmaker = PdfMaker(logger, username, nombre, apellidos, tarifa, qty, uprice, money, monitor)
+    pdfmaker.dumpPdf()
+
+    loggerConf.removeLogger(logger,handler)
