@@ -49,7 +49,7 @@ class PageUserInf(PageGeneric):
         self.tree.heading('username', text = 'Username', anchor = CENTER)
         self.tree.heading('tarifa', text = 'Tarifa', anchor = CENTER)
         self.tree.heading('dinero', text = 'Dinero (euro)', anchor = CENTER)
-        self.tree.heading('paquetes', text = 'Paquetes', anchor = CENTER)
+        self.tree.heading('paquetes', text = 'Bytes', anchor = CENTER)
         self.tree.heading('tiempo', text = 'Tiempo (s)', anchor = CENTER)
 
         #Refresh data

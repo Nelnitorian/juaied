@@ -60,7 +60,7 @@ class DaoRad:
         except Exception as e:
             raise
     
-    #Método que devuelve el número de paquetes enviados por el usuario
+    #Método que devuelve el número de octetos enviados por el usuario
 
     def select_paquetes_in(self,username):
         sql = "SELECT acctinputoctets FROM radacct WHERE username='{}'".format(username)
@@ -74,7 +74,7 @@ class DaoRad:
         except Exception as e:
             raise
 
-    #Método que devuelve el numero de paquetes recibidos por el usuairo        
+    #Método que devuelve el numero de octetos recibidos por el usuairo        
 
     def select_paquetes_out(self,username):
         sql = "SELECT acctoutputoctets FROM radacct WHERE username='{}'".format(username)
