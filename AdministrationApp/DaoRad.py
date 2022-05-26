@@ -87,3 +87,15 @@ class DaoRad:
 
         except Exception as e:
             raise
+
+    def select_users(self):
+        sql = "SELECT username FROM radcheck"
+
+        try:
+            self.cursor.execute(sql)
+            users = self.cursor.fetchall()
+
+            return users
+
+        except Exception as e:
+            return False
