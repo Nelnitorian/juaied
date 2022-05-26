@@ -2,7 +2,8 @@
 
 from src import loggerConf
 from time import sleep
-import DaoRad, DaoUserInf, DaoTax
+from DAO import DaoRad, DaoUserInf, DaoTax
+import sys
 import signal
 
 """
@@ -12,8 +13,7 @@ import signal
 
 """
 
-INTERVAL = 5 #seconds
-global STOP_THREADS
+INTERVAL = 10 #seconds
 global logger, handler, dr, dui, dt
 
 
@@ -21,25 +21,27 @@ def run():
     global logger, handler, dr, dui
     logger,handler = loggerConf.configureLogger()
     logger.debug('Logger initiated')
-    
-    dr = DaoRad()
-    dui = DaoUserInf()
-    dt = DaoTax()
-    
+
+    dr = DaoRad.DaoRad()
+    dui = DaoUserInf.DaoUserInf()
+    dt = DaoTax.DaoTax()
+
     logger.debug('Configuring Ctrl+C handler')
     signal.signal(signal.SIGINT, forceClose)
-    
+
+    nloop=0
     while True:
+        logger.debug('Starting loop nº {n}'.format(n=nloop))
         usernames = getUsernames()
         dic = getRemoteData(usernames)
         for user, data in dic.items():
             updateDatabase(user,data)
-        
+        nloop+=1
         sleep(INTERVAL)
-        
+
 def getUsernames():
-    #TODO Hay que encontrar la lista de los usuarios.
-    usernames = ['usertest']
+    global dr
+    usernames = dr.select_users()
     return usernames
 
 def getRemoteData(usernames):
@@ -51,7 +53,7 @@ def getRemoteData(usernames):
         pkg_out = dr.select_paquetes_out(user)
         pkg_tot = pkg_in + pkg_out
         dic[user] = [time,pkg_tot]
-    
+
     return dic
 
 def updateDatabase(user,data):
@@ -78,10 +80,11 @@ def getUpdatedDinero(user,time,pkg):
     dinero = ratio * accounted
     return dinero
 
-def forceClose():
+def forceClose(sig, frame):
     global logger,handler
+    logger.debug('Pressed Ctrl+C, closing program!')
     loggerConf.removeLogger(logger,handler)
+    sys.exit(0)
 
 if __name__ == '__main__':
     run()
-    

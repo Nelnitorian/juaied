@@ -1,6 +1,0 @@
-login - https://www.paladion.net/blogs/sending-salted-hashes-just-got#:~:text=Let%27s%20call%20the%20user-specific,is%20Hash(password%2C%20user_salt)
-coa - https://freeradius-users.freeradius.narkive.com/5mZXm1fD/setup-freeradius-to-generateng-coa
-comentarios - https://stackabuse.com/commenting-python-code/
-logging:
-    - https://docs.python.org/3/howto/logging-cookbook.html
-    - https://docs.python.org/3.7/library/logging.html#logging.Handler.handle

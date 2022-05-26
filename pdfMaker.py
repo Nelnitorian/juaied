@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+#import sys; print(sys.version)
 #Main imports
 from borb.pdf import Document
 from borb.pdf.page.page import Page
@@ -30,15 +30,17 @@ from borb.pdf.canvas.layout.table.table import TableCell
 from borb.pdf.pdf import PDF
 
 from src import loggerConf
+from DAO import DaoTax
 
 import os
 
 
 class PdfMaker():
 
-    def __init__(self, logger, username, nombre, apellidos, tarifa, qty, uprice, money, monitor):
-
+    def __init__(self, username, apellidos, nombre, tarifa, dinero, bytes, tiempo, logger):
         logger.debug("Initiating PdfMaker...")
+
+        self.dt = DaoTax.DaoTax()
 
         self.logger = logger
 
@@ -47,10 +49,13 @@ class PdfMaker():
         self.surname = apellidos
         self.tarifa = tarifa
 
-        self.qty = qty
-        self.uprice = uprice
-        self.money = money
-        self.monitor = monitor
+        self.time = tiempo
+        self.bytes = bytes
+        self.uprice = self.dt.select_ratio(tarifa)
+        self.money = dinero
+        self.monitor = self.dt.select_control(tarifa)
+
+
 
         #Create document
         self.pdf = Document()
@@ -142,6 +147,12 @@ class PdfMaker():
         odd_color = HexColor("BBBBBB")
         even_color = HexColor("FFFFFF")
         total_money = 0
+
+        if self.monitor == 'paquetes':
+            self.qty = self.bytes
+        else:
+            self.qty = self.time
+
         for row_number, item in enumerate([(self.monitor, self.qty, self.uprice, self.money)]):
             c = even_color if row_number % 2 == 0 else odd_color
             table_001.add(TableCell(Paragraph(item[0]), background_color=c))
@@ -182,17 +193,16 @@ if __name__ == '__main__':
 
     logger,handler = loggerConf.configureLogger()
 
-    username = "usuario123"
-    nombre = "pepe antonio"
-    apellidos = "el del barrio"
-    tarifa = "360 NOSCOPE"
+    username = "edurubcam"
+    nombre = "Eduardo"
+    apellidos = "Rubio Camacho"
+    tarifa = "default"
 
-    qty = 5
-    uprice = 10
-    money = 50
-    monitor = "paquetes"
+    bytes = 100
+    tiempo = 100
+    dinero = 13
 
-    pdfmaker = PdfMaker(logger, username, nombre, apellidos, tarifa, qty, uprice, money, monitor)
+    pdfmaker = PdfMaker(username, apellidos, nombre, tarifa, dinero, bytes, tiempo, logger)
     pdfmaker.dumpPdf()
 
     loggerConf.removeLogger(logger,handler)
