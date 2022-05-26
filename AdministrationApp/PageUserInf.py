@@ -1,11 +1,13 @@
-from ctypes import sizeof
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+#from src import loggerConf
 
 from PageGeneric import PageGeneric
 from UtilitiesFun import *
 from DaoUserInf import DaoUserInf
+
+#from PdfMaker import PdfMaker
 
 class PageUserInf(PageGeneric):
 
@@ -106,8 +108,8 @@ class PageUserInf(PageGeneric):
                     dao.select_tiempo(user)
                     ))
 
-        #Refresar datos cada 3 segundos
-        self.id = self.tree.after(3000,self.insert_data)
+        #Refresar datos cada 10 segundos
+        self.id = self.tree.after(10000,self.insert_data)
 
     def select(self,event):
 
@@ -116,13 +118,26 @@ class PageUserInf(PageGeneric):
             username = self.tree.item(self.tree.selection())['values'][1]
             nombre = self.tree.item(self.tree.selection())['values'][0]
             apellidos = self.tree.item(self.tree.selection())['text']
+            tarifa = self.tree.item(self.tree.selection())['values'][2]
+            dinero = self.tree.item(self.tree.selection())['values'][3]
+            paquetes = self.tree.item(self.tree.selection())['values'][4]
+            tiempo = self.tree.item(self.tree.selection())['values'][5]
+
             election = messagebox.askokcancel(message="¿Realizar factura para {} {}?".format(nombre, apellidos), title="Confimar elección")
             
+
+            """
             if(election == True):
-                print("Se genera factura")
+
+                logger,handler = loggerConf.configureLogger()
+
+                pdfmaker = PdfMaker(username, apellidos, nombre, tarifa, dinero, paquetes, tiempo, logger)
+                pdfmaker.dumpPdf()
+
+                loggerConf.removeLogger(logger,handler)
             else:
                 print("No se genera la factura")
-
+            """
         except Exception as e:
             pass
 

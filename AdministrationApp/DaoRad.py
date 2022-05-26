@@ -55,7 +55,11 @@ class DaoRad:
             self.cursor.execute(sql)
             tiempo = self.cursor.fetchone()
 
-            return tiempo[0]
+            total = 0
+            for segundos in tiempo:
+                total += segundos[0]
+            
+            return total
 
         except Exception as e:
             raise
@@ -67,9 +71,13 @@ class DaoRad:
         
         try:
             self.cursor.execute(sql)
-            paquetes = self.cursor.fetchone()
+            paquetes = self.cursor.fetchall()
 
-            return paquetes[0]
+            total = 0
+            for octetos in paquetes:
+                total += octetos[0]
+            
+            return total
 
         except Exception as e:
             raise
@@ -83,7 +91,11 @@ class DaoRad:
             self.cursor.execute(sql)
             paquetes = self.cursor.fetchone()
 
-            return paquetes[0]
+            total = 0
+            for octetos in paquetes:
+                total += octetos[0]
+            
+            return total
 
         except Exception as e:
             raise
