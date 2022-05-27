@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS user_inf (
   KEY username (apellidos(64))
 );
 
-INSERT INTO user_inf VALUES ('edurubcam','password','Eduardo','Rubio Camacho','TarifaOne',13,100,100);
-INSERT INTO user_inf VALUES ('manolito','passmanolo','Manolo','Marin Marmolea','TarifaOne',20,200,240);
+--INSERT INTO user_inf VALUES ('edurubcam','password','Eduardo','Rubio Camacho','TarifaOne',13,100,100);
+--INSERT INTO user_inf VALUES ('manolito','passmanolo','Manolo','Marin Marmolea','TarifaOne',20,200,240);
 
 CREATE TABLE IF NOT EXISTS tarifa_inf (
     tarifa varchar(64) NOT NULL default '',
@@ -29,4 +29,4 @@ CREATE TABLE IF NOT EXISTS tarifa_inf (
     KEY tarifa (tarifa(64))
 );
 
-INSERT INTO tarifa_inf VALUES ('default','paquetes',1);
+--INSERT INTO tarifa_inf VALUES ('default','paquetes',1);
