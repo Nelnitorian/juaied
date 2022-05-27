@@ -37,7 +37,7 @@ import os
 
 class PdfMaker():
 
-    def __init__(self, username, apellidos, nombre, tarifa, dinero, bytes, tiempo, logger):
+    def __init__(self, username, apellidos, nombre, tarifa, dinero, paquetes, tiempo, logger):
         logger.debug("Initiating PdfMaker...")
 
         self.dt = DaoTax.DaoTax()
@@ -50,7 +50,7 @@ class PdfMaker():
         self.tarifa = tarifa
 
         self.time = tiempo
-        self.bytes = bytes
+        self.paquetes = paquetes
         self.uprice = self.dt.select_ratio(tarifa)
         self.money = dinero
         self.monitor = self.dt.select_control(tarifa)
@@ -149,7 +149,7 @@ class PdfMaker():
         total_money = 0
 
         if self.monitor == 'paquetes':
-            self.qty = self.bytes
+            self.qty = self.paquetes
         else:
             self.qty = self.time
 
@@ -198,11 +198,11 @@ if __name__ == '__main__':
     apellidos = "Rubio Camacho"
     tarifa = "default"
 
-    bytes = 100
+    paquetes = 100
     tiempo = 100
     dinero = 13
 
-    pdfmaker = PdfMaker(username, apellidos, nombre, tarifa, dinero, bytes, tiempo, logger)
+    pdfmaker = PdfMaker(username, apellidos, nombre, tarifa, dinero, paquetes, tiempo, logger)
     pdfmaker.dumpPdf()
 
     loggerConf.removeLogger(logger,handler)
