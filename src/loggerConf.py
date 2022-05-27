@@ -35,6 +35,10 @@ def configureLogger():
         f.close()
      """
     createFolder(LOGGING_FOLDER)
+    
+    cmd = 'touch {log}'.format(logFilePath)
+    os.system(cmd)
+    
     handler = logging.FileHandler(logFilePath)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
