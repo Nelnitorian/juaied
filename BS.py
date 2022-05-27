@@ -18,7 +18,7 @@ global logger, handler, dr, dui, dt
 
 
 def run():
-    global logger, handler, dr, dui
+    global logger, handler, dr, dui, dt
     logger,handler = loggerConf.configureLogger()
     logger.debug('Logger initiated')
 
@@ -47,7 +47,8 @@ def getUsernames():
 def getRemoteData(usernames):
     global dr
     dic = {}
-    for user in usernames:
+    for usera in usernames:
+        user=usera[0]
         time = dr.select_tiempo(user)
         pkg_in = dr.select_paquetes_in(user)
         pkg_out = dr.select_paquetes_out(user)
@@ -69,7 +70,6 @@ def updateDatabase(user,data):
 def getUpdatedDinero(user,time,pkg):
     global dui, dt
     tarifa = dui.select_tarifa(user)
-    #TODO modificar para los daos oportunos
     ratio = dt.select_ratio(tarifa)
     control = dt.select_control(tarifa)
     accounted = 0

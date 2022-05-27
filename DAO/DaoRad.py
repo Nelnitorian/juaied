@@ -3,9 +3,9 @@ import pymysql
 class DaoRad:
     def __init__(self):
         self.connection = pymysql.connect(
-            host='localhost',
-            user='admin',
-            password='admin',
+            host='25.14.195.158',
+            user='billing',
+            password='password',
             db='radius'
         )
         self.cursor = self.connection.cursor()
@@ -53,7 +53,7 @@ class DaoRad:
 
         try:
             self.cursor.execute(sql)
-            tiempo = self.cursor.fetchone()
+            tiempo = self.cursor.fetchall()
 
             total = 0
             for segundos in tiempo:
@@ -89,7 +89,7 @@ class DaoRad:
 
         try:
             self.cursor.execute(sql)
-            paquetes = self.cursor.fetchone()
+            paquetes = self.cursor.fetchall()
 
             total = 0
             for octetos in paquetes:
