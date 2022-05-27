@@ -3,9 +3,9 @@ import pymysql
 class DaoTax:
     def __init__(self):
         self.connection = pymysql.connect(
-            host='localhost',
-            user='admin',
-            password='admin',
+            host='25.56.51.151',
+            user='eduardo',
+            password='password',
             db='company'
         )
         self.cursor = self.connection.cursor()
@@ -49,7 +49,7 @@ class DaoTax:
 
     # Método que devuelve ratio
 
-    def select_control(self,tarifa):
+    def select_ratio(self,tarifa):
         sql = "SELECT ratio FROM tarifa_inf WHERE tarifa = '{}'".format(tarifa)
 
         try:
@@ -63,7 +63,7 @@ class DaoTax:
 
     # Método que modifica ratio
 
-    def update_control(self, tarifa, ratio):
+    def update_ratio(self, tarifa, ratio):
         sql = "UPDATE tarifa_inf SET ratio='{}' WHERE tarifa = '{}'".format(ratio, tarifa)
 
         try:
@@ -84,3 +84,7 @@ class DaoTax:
             return tarifas
         except Exception as e:
             raise
+
+    def disconnect(self):
+        self.connection.close()
+        self.cursor.close()

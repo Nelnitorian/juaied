@@ -7,7 +7,8 @@ from PageGeneric import PageGeneric
 from UtilitiesFun import *
 from DaoUserInf import DaoUserInf
 
-#from PdfMaker import PdfMaker
+from pdfMaker import PdfMaker
+from src import loggerConf
 
 class PageUserInf(PageGeneric):
 
@@ -40,7 +41,7 @@ class PageUserInf(PageGeneric):
         label.grid(row = 1,columnspan=2,sticky=W+E, pady = 7, padx = 5)
 
         #Frame container
-        frame2 = LabelFrame(self.win, text = 'Datos en tiempo real')
+        frame2 = LabelFrame(self.win, text = 'Datos en tiempo real (1min)')
         frame2.grid(row = 2, column = 0, rowspan = 3, columnspan = 3, padx = 45, pady = 130 )
 
         #Table
@@ -125,19 +126,17 @@ class PageUserInf(PageGeneric):
 
             election = messagebox.askokcancel(message="¿Realizar factura para {} {}?".format(nombre, apellidos), title="Confimar elección")
             
-
-            """
             if(election == True):
 
-                logger,handler = loggerConf.configureLogger()
+                #logger,handler = loggerConf.configureLogger()
 
-                pdfmaker = PdfMaker(username, apellidos, nombre, tarifa, dinero, paquetes, tiempo, logger)
+                pdfmaker = PdfMaker(username, apellidos, nombre, tarifa, dinero, paquetes, tiempo)
                 pdfmaker.dumpPdf()
 
-                loggerConf.removeLogger(logger,handler)
+                #loggerConf.removeLogger(logger,handler)
             else:
                 print("No se genera la factura")
-            """
+
         except Exception as e:
             pass
 

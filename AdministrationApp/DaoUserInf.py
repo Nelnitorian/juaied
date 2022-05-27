@@ -3,9 +3,9 @@ import pymysql
 class DaoUserInf:
     def __init__(self):
         self.connection = pymysql.connect(
-            host='localhost',
-            user='admin',
-            password='admin',
+            host='25.56.51.151',
+            user='eduardo',
+            password='password',
             db='company'
         )
         self.cursor = self.connection.cursor()
@@ -259,4 +259,8 @@ class DaoUserInf:
             self.cursor.execute(sql)
             self.connection.commit()
         except Exception as e:
-            raise 
+            raise
+         
+    def disconnect(self):
+        self.connection.close()
+        self.cursor.close()

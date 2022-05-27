@@ -43,7 +43,7 @@ class DaoRad:
             self.cursor.execute(sql)
             self.connection.commit()
 
-        except:
+        except Exception as e:
             raise
 
     #Método que devuelve el tiempo de sesión de un usuario
@@ -53,7 +53,7 @@ class DaoRad:
 
         try:
             self.cursor.execute(sql)
-            tiempo = self.cursor.fetchone()
+            tiempo = self.cursor.fetchall()
 
             total = 0
             for segundos in tiempo:
@@ -89,7 +89,7 @@ class DaoRad:
         
         try:
             self.cursor.execute(sql)
-            paquetes = self.cursor.fetchone()
+            paquetes = self.cursor.fetchall()
 
             total = 0
             for octetos in paquetes:
@@ -111,3 +111,7 @@ class DaoRad:
 
         except Exception as e:
             return False
+
+    def disconnect(self):
+        self.connection.close()
+        self.cursor.close()
