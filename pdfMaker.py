@@ -186,7 +186,7 @@ class PdfMaker():
         path = os.path.join(folder,pdf_name)
         with open(path, "wb") as pdf_file_handle:
             PDF.dumps(pdf_file_handle, self.pdf)
-            logger.debug("PDF dumped properly")
+            self.logger.debug("PDF dumped properly")
 
 
 if __name__ == '__main__':
