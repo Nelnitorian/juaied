@@ -110,4 +110,11 @@ class DaoRad:
             return users
 
         except Exception as e:
-            return False
+            return False     
+
+    def disconnect(self):
+        self.connection.close()
+        self.cursor.close()
+     
+         
+    

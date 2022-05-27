@@ -22,20 +22,20 @@ def run():
     logger,handler = loggerConf.configureLogger()
     logger.debug('Logger initiated')
 
-    dr = DaoRad.DaoRad()
-    dui = DaoUserInf.DaoUserInf()
-    dt = DaoTax.DaoTax()
-
     logger.debug('Configuring Ctrl+C handler')
     signal.signal(signal.SIGINT, forceClose)
 
     nloop=0
     while True:
         logger.debug('Starting loop nº {n}'.format(n=nloop))
+        dr = DaoRad.DaoRad()
+        dui = DaoUserInf.DaoUserInf()
+        dt = DaoTax.DaoTax()
         usernames = getUsernames()
         dic = getRemoteData(usernames)
         for user, data in dic.items():
             updateDatabase(user,data)
+        dr.disconnect()
         nloop+=1
         sleep(INTERVAL)
 
@@ -64,13 +64,15 @@ def updateDatabase(user,data):
     dinero = getUpdatedDinero(user,time,pkg)
     logger.debug('Actualización de datos en tabla: user = {user}, time = {time}, pkg = {pkg}'.format(user=user,time=time,pkg=pkg))
     dui.update_dinero(user,dinero)
+    #print(user)
+    #print(pkg)
     dui.update_paquetes(user,pkg)
     dui.update_tiempo(user,time)
 
 def getUpdatedDinero(user,time,pkg):
     global dui, dt
     tarifa = dui.select_tarifa(user)
-    ratio = dt.select_ratio(tarifa)
+    ratio = float(dt.select_ratio(tarifa))
     control = dt.select_control(tarifa)
     accounted = 0
     if control == 'paquetes':
